@@ -51,6 +51,14 @@ class LoginSchema(BaseModel):
     class Config:
         from_attributes = True
 
+class ClienteUpdate(BaseModel):
+    nome: Optional[str] = None
+    email: Optional[str] = None
+    cnpj: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
 '''class UsuarioSchema(BaseModel):
     nome: str
     email: str
