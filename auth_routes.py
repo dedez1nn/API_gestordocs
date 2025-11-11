@@ -19,10 +19,6 @@ def criar_token(id_usuario: int, duracao_token=timedelta(minutes=ACCESS_TOKEN_EX
 
 def autenticar_usuario(login, senha, session):
     usuario = session.query(Contador).filter(Contador.login == login).first()
-
-    print("Hash armazenado:", usuario.senha)
-    print("Senha recebida:", senha)
-    print("Verificação:", bcrypt_context.verify(senha, usuario.senha))
     if not usuario or not bcrypt_context.verify(senha, usuario.senha):
         return False
     return usuario
@@ -52,14 +48,6 @@ async def criar_conta(contador_schema: ContadorSchema, session: Session = Depend
 
 @auth_router.post("/login")
 async def login(login_schema: LoginSchema, session: Session = Depends(pegar_sessao)):
-    print("Login recebido:", login_schema.dict())
-    try:
-        result = session.execute(text("SELECT 1")).fetchone()
-        print("Conexão OK:", result)
-    except Exception as e:
-        print("Erro na conexão com o banco:", e)
-        raise HTTPException(status_code=500, detail="Erro de conexão com o banco")
-
     usuario = autenticar_usuario(login_schema.login, login_schema.senha, session)
     if not usuario:
         raise HTTPException(status_code=400, detail="Email ou senha invalidos")
