@@ -57,9 +57,8 @@ async def login(login_schema: LoginSchema, session: Session = Depends(pegar_sess
         usuario.machine_id = login_schema.machine_id
         session.commit()
     else:
-        print(usuario.machine_id)
-        print(hashlib.sha256(login_schema.machine_id.encode()).hexdigest())
-        raise HTTPException(status_code=403, detail="Dispositivo nao autorizado")
+        if usuario.machine_id != login_schema.machine_id:
+            raise HTTPException(status_code=403, detail="Dispositivo nao autorizado")
 
     access_token = criar_token(usuario.id)
     refresh_token = criar_token(usuario.id, duracao_token=timedelta(days=7))
