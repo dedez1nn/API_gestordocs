@@ -3,7 +3,7 @@ from sqlalchemy import DateTime, create_engine, Column, String, Integer, Boolean
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy_utils.types import ChoiceType
 
-db = create_engine("postgresql+psycopg2://postgres:mabel123@localhost:5432/api_test")
+db = create_engine("postgresql+psycopg2://api_test_09ef_user:wiOvKcbOo83BRFj34Y6dQFsydbMnTImJ@dpg-d49jau7gi27c73ccos0g-a.frankfurt-postgres.render.com/api_test_09ef")
 
 
 Base = declarative_base()
