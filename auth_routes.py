@@ -47,6 +47,7 @@ async def criar_conta(contador_schema: ContadorSchema, session: Session = Depend
 
 @auth_router.post("/login")
 async def login(login_schema: LoginSchema, session: Session = Depends(pegar_sessao)):
+    
     usuario = autenticar_usuario(login_schema.login, login_schema.senha, session)
     if not usuario:
         raise HTTPException(status_code=400, detail="Email ou senha invalidos")
