@@ -34,6 +34,7 @@ class Cliente(Base):
     nome = Column("nome", String, unique=True)
     email = Column("email", String, nullable=False, unique=True)
     cnpj = Column("cnpj", String, nullable=False, unique=True)
+    telefone = Column("telefone", String, unique=True)
     contador_id = Column(Integer, ForeignKey("contadores.id"), nullable=True)
 
     contador = relationship("Contador")

@@ -18,6 +18,7 @@ class ClienteSchema(BaseModel):
     nome: Optional[str]
     email: str
     cnpj: str
+    telefone = Optional[str]
 
     class Config:
         orm_mode = True
@@ -55,6 +56,7 @@ class ClienteUpdate(BaseModel):
     nome: Optional[str] = None
     email: Optional[str] = None
     cnpj: Optional[str] = None
+    telefone: Optional[str] = None
 
     class Config:
         from_attributes = True
@@ -65,45 +67,3 @@ class SenhaAppUpdate(BaseModel):
 
     class Config:
         from_attributes = True
-
-
-class AnexoBase64(BaseModel):
-    nome_arquivo: str = Field(..., examples=["documento.pdf"])
-    conteudo_base64: str = Field(..., description="PDF em formato base64")
-    tipo_mime: str = Field(default="application/pdf", examples=["application/pdf"])
-
-    class Config:
-        from_attributes = True
-
-
-class EmailSender(BaseModel):
-    destinatario: str
-    assunto: str
-    corpo_email: Optional[str] = None
-    anexo: AnexoBase64
-
-    class Config:
-        from_attributes = True
-
-'''class UsuarioSchema(BaseModel):
-    nome: str
-    email: str
-    senha: str 
-    ativo: Optional[bool]
-    admin: Optional[bool]
-    
-    class Config:
-        from_attributes = True
-
-class PedidoSchema(BaseModel):
-    usuario: int
-    
-    class Config:
-        from_attributes = True
-        
-class LoginSchema(BaseModel):
-    email: str
-    senha: str
-    
-    class Config:
-        from_attributes = True'''

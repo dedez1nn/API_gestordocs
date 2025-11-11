@@ -95,7 +95,8 @@ def criar_cliente(
     novo_cliente = Cliente(
         nome=cliente_data["nome"],
         email=cliente_data["email"],
-        cnpj=cliente_data["cnpj"]
+        cnpj=cliente_data["cnpj"],
+        telefone=cliente_data["telefone"]
     )
 
     novo_cliente.contador_id = usuario_id
