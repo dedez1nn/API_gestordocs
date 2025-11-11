@@ -5,8 +5,8 @@ from typing import Optional
 class ContadorSchema(BaseModel):
     email: str
     login: str
-    senha: Optional[str] 
-    machine_id: str
+    senha: str
+    machine_id: Optional[str]
     senha_app: Optional[str]
     admin: Optional[bool] = False
 

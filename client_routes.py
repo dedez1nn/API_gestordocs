@@ -92,7 +92,6 @@ def criar_cliente(
     if cliente_existente_email:
         raise HTTPException(status_code=400, detail="Já existe um cliente com este email")
 
-    # ✅ CORREÇÃO: Criar cliente sem contador_id no construtor
     novo_cliente = Cliente(
         nome=cliente_data["nome"],
         email=cliente_data["email"],

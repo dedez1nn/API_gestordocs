@@ -53,7 +53,10 @@ async def login(login_schema: LoginSchema, session: Session = Depends(pegar_sess
     if not usuario:
         raise HTTPException(status_code=400, detail="Email ou senha invalidos")
 
-    if usuario.machine_id != login_schema.machine_id:
+    if usuario.machine_id is None:
+        usuario.machine_id = login_schema.machine_id
+        session.commit()
+    else:
         print(usuario.machine_id)
         print(hashlib.sha256(login_schema.machine_id.encode()).hexdigest())
         raise HTTPException(status_code=403, detail="Dispositivo nao autorizado")
