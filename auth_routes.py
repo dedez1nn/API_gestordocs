@@ -19,7 +19,8 @@ def criar_token(id_usuario: int, duracao_token=timedelta(minutes=ACCESS_TOKEN_EX
 
 def autenticar_usuario(login, senha, session):
     usuario = session.query(Contador).filter(Contador.login == login).first()
-    if not usuario or not bcrypt_context.verify(senha[:72], usuario.senha):
+
+    if not usuario or not bcrypt_context.verify(senha, usuario.senha):
         return False
     return usuario
 
@@ -32,7 +33,7 @@ async def criar_conta(contador_schema: ContadorSchema, session: Session = Depend
     usuario = session.query(Contador).filter(Contador.email == contador_schema.email).first()
     if usuario:
         raise HTTPException(status_code=400, detail="Email ja cadastrado")
-    senha_criptografada = bcrypt_context.hash(contador_schema.senha[:72])
+    senha_criptografada = bcrypt_context.hash(contador_schema.senha)
     machine_id_cript = hashlib.sha256(contador_schema.machine_id.encode()).hexdigest()
     novo_usuario = Contador(
         email=contador_schema.email,
