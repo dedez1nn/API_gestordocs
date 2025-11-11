@@ -1,5 +1,5 @@
 from datetime import datetime
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 
 class ContadorSchema(BaseModel):
@@ -55,6 +55,32 @@ class ClienteUpdate(BaseModel):
     nome: Optional[str] = None
     email: Optional[str] = None
     cnpj: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+
+class SenhaAppUpdate(BaseModel):
+    senha_app: str
+
+    class Config:
+        from_attributes = True
+
+
+class AnexoBase64(BaseModel):
+    nome_arquivo: str = Field(..., examples=["documento.pdf"])
+    conteudo_base64: str = Field(..., description="PDF em formato base64")
+    tipo_mime: str = Field(default="application/pdf", examples=["application/pdf"])
+
+    class Config:
+        from_attributes = True
+
+
+class EmailSender(BaseModel):
+    destinatario: str
+    assunto: str
+    corpo_email: Optional[str] = None
+    anexo: AnexoBase64
 
     class Config:
         from_attributes = True

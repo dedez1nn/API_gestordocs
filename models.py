@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import DateTime, create_engine, Column, String, Integer, Boolean, Float, ForeignKey
+from sqlalchemy import DateTime, create_engine, Column, String, Integer, Boolean, ForeignKey
 from sqlalchemy.orm import declarative_base, relationship
 from sqlalchemy_utils.types import ChoiceType
 
@@ -38,10 +38,11 @@ class Cliente(Base):
 
     contador = relationship("Contador")
     
-    def __init__(self, email, cnpj, nome=None):
+    def __init__(self, email, cnpj, nome=None, contador_id=None):
         self.cnpj = cnpj
         self.email = email
         self.nome = nome
+        self.contador_id = contador_id
 
 class LogsEnvio(Base):
     __tablename__ = "logs_envio"
