@@ -48,6 +48,7 @@ async def criar_conta(contador_schema: ContadorSchema, session: Session = Depend
 
 @auth_router.post("/login")
 async def login(login_schema: LoginSchema, session: Session = Depends(pegar_sessao)):
+    print("Login recebido:", login_schema.dict())
     try:
         result = session.execute(text("SELECT 1")).fetchone()
         print("Conexão OK:", result)
@@ -59,7 +60,6 @@ async def login(login_schema: LoginSchema, session: Session = Depends(pegar_sess
     if not usuario:
         raise HTTPException(status_code=400, detail="Email ou senha invalidos")
 
-    import hashlib
     if usuario.machine_id != login_schema.machine_id:
         print(usuario.machine_id)
         print(hashlib.sha256(login_schema.machine_id.encode()).hexdigest())
