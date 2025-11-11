@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import text
 from models import Contador
 from dependencies import pegar_sessao, verificar_token
 from config import SECRET_KEY, ALGORITHM, bcrypt_context, ACCESS_TOKEN_EXPIRE_MINUTES
@@ -48,13 +49,12 @@ async def criar_conta(contador_schema: ContadorSchema, session: Session = Depend
 @auth_router.post("/login")
 async def login(login_schema: LoginSchema, session: Session = Depends(pegar_sessao)):
     try:
-        # Testa a conexão com o banco
-        result = session.execute("SELECT 1").fetchone()
+        result = session.execute(text("SELECT 1")).fetchone()
         print("Conexão OK:", result)
     except Exception as e:
         print("Erro na conexão com o banco:", e)
         raise HTTPException(status_code=500, detail="Erro de conexão com o banco")
-    
+
     usuario = autenticar_usuario(login_schema.login, login_schema.senha, session)
     if not usuario:
         raise HTTPException(status_code=400, detail="Email ou senha invalidos")
