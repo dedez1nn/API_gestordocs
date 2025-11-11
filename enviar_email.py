@@ -17,18 +17,36 @@ class Email:
             msg.set_content(corpo_email)
 
             msg.add_attachment(
-                pdf_bytes, 
-                maintype='application', 
-                subtype='pdf', 
+                pdf_bytes,
+                maintype='application',
+                subtype='pdf',
                 filename=nome_arquivo
             )
 
-            with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
-                smtp.login(self.remetente, self.senha)
-                smtp.send_message(msg)
+            # Tente diferentes portas e métodos
+            portas = [587, 465, 25]
 
-            return 1
+            for porta in portas:
+                try:
+                    if porta == 587:
+                        with smtplib.SMTP('smtp.gmail.com', porta, timeout=30) as smtp:
+                            smtp.starttls()
+                            smtp.login(self.remetente, self.senha)
+                            smtp.send_message(msg)
+                    else:
+                        with smtplib.SMTP_SSL('smtp.gmail.com', porta, timeout=30) as smtp:
+                            smtp.login(self.remetente, self.senha)
+                            smtp.send_message(msg)
+
+                    print(f"✅ Email enviado via porta {porta}")
+                    return 1
+
+                except Exception as e:
+                    print(f"❌ Porta {porta} falhou: {e}")
+                    continue
+
+            return 0
 
         except Exception as e:
             print(f"Erro ao enviar o e-mail: {e}")
-            return 0  # Erro
+            return 0
