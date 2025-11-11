@@ -47,6 +47,13 @@ async def criar_conta(contador_schema: ContadorSchema, session: Session = Depend
 
 @auth_router.post("/login")
 async def login(login_schema: LoginSchema, session: Session = Depends(pegar_sessao)):
+    try:
+        # Testa a conexão com o banco
+        result = session.execute("SELECT 1").fetchone()
+        print("Conexão OK:", result)
+    except Exception as e:
+        print("Erro na conexão com o banco:", e)
+        raise HTTPException(status_code=500, detail="Erro de conexão com o banco")
     
     usuario = autenticar_usuario(login_schema.login, login_schema.senha, session)
     if not usuario:
