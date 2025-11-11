@@ -19,6 +19,10 @@ def criar_token(id_usuario: int, duracao_token=timedelta(minutes=ACCESS_TOKEN_EX
 
 def autenticar_usuario(login, senha, session):
     usuario = session.query(Contador).filter(Contador.login == login).first()
+
+    print("Hash armazenado:", usuario.senha)
+    print("Senha recebida:", senha)
+    print("Verificação:", bcrypt_context.verify(senha, usuario.senha))
     if not usuario or not bcrypt_context.verify(senha, usuario.senha):
         return False
     return usuario
