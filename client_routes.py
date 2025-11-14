@@ -25,7 +25,7 @@ def listar_clientes_logica(db: Session, usuario_id: int):
     clientes = db.query(Cliente).filter(Cliente.contador_id == usuario_id).all()
 
     return [
-        {"id": c.id, "nome": c.nome, "email": c.email, "cnpj": c.cnpj}
+        {"id": c.id, "nome": c.nome, "email": c.email, "cnpj": c.cnpj, "telefone": c.telefone}
         for c in clientes
     ]
 
@@ -96,23 +96,22 @@ def criar_cliente(
         nome=cliente_data["nome"],
         email=cliente_data["email"],
         cnpj=cliente_data["cnpj"],
-        telefone=cliente_data["telefone"]
+        telefone=cliente_data["telefone"],  # Usar telefone limpo
+        contador_id=usuario_id  # ⚠️ ESTA LINHA ESTAVA FALTANDO!
     )
-
-    novo_cliente.contador_id = usuario_id
 
     session.add(novo_cliente)
     session.commit()
     session.refresh(novo_cliente)
 
     return {
-        "id": novo_cliente.id,
+        "id": novo_cliente.id,  # Adicione o ID na resposta
         "nome": novo_cliente.nome,
         "email": novo_cliente.email,
         "cnpj": novo_cliente.cnpj,
+        "telefone": novo_cliente.telefone,
         "contador_id": novo_cliente.contador_id
     }
-
 @client_router.delete("/excluir/{cliente_id}")
 def excluir_cliente(
     cliente_id: int,

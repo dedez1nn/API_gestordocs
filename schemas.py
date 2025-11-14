@@ -18,7 +18,7 @@ class ClienteSchema(BaseModel):
     nome: Optional[str]
     email: str
     cnpj: str
-    telefone = Optional[str]
+    telefone: Optional[str] = None
 
     class Config:
         orm_mode = True

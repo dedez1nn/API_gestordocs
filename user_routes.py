@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from dependencies import pegar_sessao, verificar_token
 from models import Contador
-from schemas import SenhaAppUpdate, EmailSender
+from schemas import SenhaAppUpdate
 from config import fernet_instance
 
 user_router = APIRouter(
