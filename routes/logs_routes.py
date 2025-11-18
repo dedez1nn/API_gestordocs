@@ -1,8 +1,8 @@
 from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from dependencies import pegar_sessao, verificar_token
-from models import Cliente, Contador, LogsEnvio
+from api.dependencies import pegar_sessao, verificar_token
+from db.models import Cliente, Contador, LogsEnvio
 
 logs_router = APIRouter(
     prefix="/logs",
@@ -51,7 +51,6 @@ def salvar_log_envio(
     if not contador:
         raise HTTPException(status_code=401, detail="Contador não encontrado")
 
-    # Buscar cliente pelo CNPJ se fornecido
     cliente_id = None
     if log_data.get("cnpj_cliente"):
         cliente = session.query(Cliente).filter(
@@ -61,7 +60,6 @@ def salvar_log_envio(
         if cliente:
             cliente_id = cliente.id
 
-    # Criar log de envio
     novo_log = LogsEnvio(
         usuario_id=usuario_id,
         cliente_id=cliente_id,

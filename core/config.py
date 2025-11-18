@@ -20,8 +20,6 @@ def criar_chave_fernet(senha: str):
 CHAVE_FERNET = criar_chave_fernet(KEY_APP)
 fernet_instance = Fernet(CHAVE_FERNET)
 
-# Contexto de hash de senha
 bcrypt_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
-# OAuth2 esquema padrão
 oauth2_schema = OAuth2PasswordBearer(tokenUrl="auth/login-form")

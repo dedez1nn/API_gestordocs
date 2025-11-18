@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from dependencies import pegar_sessao, verificar_token
-from models import Cliente, Contador
-from schemas import ClienteUpdate
+from api.dependencies import pegar_sessao, verificar_token
+from db.models import Cliente, Contador
+from db.schemas import ClienteUpdate
 
 client_router = APIRouter(
     prefix="/clientes",
@@ -29,9 +29,9 @@ def listar_clientes_logica(db: Session, usuario_id: int):
         for c in clientes
     ]
 
-@client_router.put("/editar/{cliente_id}")  # ✅ CORRIGIDO: cliente_id na URL
+@client_router.put("/editar/{cliente_id}")
 def editar_clientes(
-    cliente_id: int,  # ✅ Agora vem da URL
+    cliente_id: int,
     novo_cliente: ClienteUpdate,
     session: Session = Depends(pegar_sessao),
     usuario_id: int = Depends(verificar_token)
@@ -47,7 +47,6 @@ def editar_clientes(
     if not cliente:
         raise HTTPException(status_code=404, detail="Cliente não encontrado")
 
-    # Atualizar apenas os campos que foram fornecidos
     if novo_cliente.nome is not None:
         cliente.nome = novo_cliente.nome
     if novo_cliente.email is not None:
@@ -71,7 +70,6 @@ def criar_cliente(
         session: Session = Depends(pegar_sessao),
         usuario_id: int = Depends(verificar_token)
 ):
-    """Cria um novo cliente para o contador logado"""
     contador = session.query(Contador).filter(Contador.id == usuario_id).first()
     if not contador:
         raise HTTPException(status_code=401, detail="Contador não encontrado")
@@ -96,8 +94,8 @@ def criar_cliente(
         nome=cliente_data["nome"],
         email=cliente_data["email"],
         cnpj=cliente_data["cnpj"],
-        telefone=cliente_data["telefone"],  # Usar telefone limpo
-        contador_id=usuario_id  # ⚠️ ESTA LINHA ESTAVA FALTANDO!
+        telefone=cliente_data["telefone"],
+        contador_id=usuario_id
     )
 
     session.add(novo_cliente)
@@ -105,7 +103,7 @@ def criar_cliente(
     session.refresh(novo_cliente)
 
     return {
-        "id": novo_cliente.id,  # Adicione o ID na resposta
+        "id": novo_cliente.id,
         "nome": novo_cliente.nome,
         "email": novo_cliente.email,
         "cnpj": novo_cliente.cnpj,

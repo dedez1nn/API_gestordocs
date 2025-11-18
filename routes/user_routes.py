@@ -1,11 +1,9 @@
-import base64
-
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from dependencies import pegar_sessao, verificar_token
-from models import Contador
-from schemas import SenhaAppUpdate
-from config import fernet_instance
+from api.dependencies import pegar_sessao, verificar_token
+from db.models import Contador
+from db.schemas import SenhaAppUpdate
+from core.config import fernet_instance
 
 user_router = APIRouter(
     prefix="/contadores",
